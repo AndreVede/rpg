@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) struct Health {
+pub struct Health {
     level: u32,
     max: u32,
 }
@@ -70,6 +70,20 @@ impl Health {
     pub fn get_max(&self) -> &u32 {
         &self.max
     }
+
+    pub fn set_level(&mut self, new_level: u32) -> Result<(), HealthError> {
+        Health::validate(new_level, self.max)?;
+
+        self.level = new_level;
+        Ok(())
+    }
+
+    pub fn set_max(&mut self, new_max: u32) {
+        // change the current level
+        self.level = new_max;
+        // change the max level
+        self.max = new_max;
+    }
 }
 
 #[cfg(test)]
@@ -117,5 +131,29 @@ mod test {
         health.decrease(10u32);
 
         assert_eq!(health.get_level(), &0u32);
+    }
+
+    #[test]
+    fn test_set_level() {
+        let mut health = Health::new(10u32, None).unwrap();
+
+        health.set_level(2u32).unwrap();
+        assert_eq!(health.get_level(), &2u32);
+
+        let err = health.set_level(11u32).unwrap_err();
+        assert_eq!(err, HealthError::LevelTooHigh);
+    }
+
+    #[test]
+    fn test_set_max_level() {
+        let mut health = Health::new(120u32, None).unwrap();
+
+        health.set_max(8u32);
+        assert_eq!(health.get_max(), &8u32);
+        assert_eq!(health.get_level(), &8u32);
+
+        health.set_max(10u32);
+        assert_eq!(health.get_max(), &10u32);
+        assert_eq!(health.get_level(), &10u32);
     }
 }

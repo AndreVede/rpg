@@ -10,6 +10,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "entity_proc_macro"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.93"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -36,6 +44,14 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "tests"
+version = "0.1.0"
+dependencies = [
+ "entity",
+ "entity_proc_macro",
 ]
 
 [[package]]
